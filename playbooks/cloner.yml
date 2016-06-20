@@ -1,0 +1,25 @@
+---
+# this playbook handles the deployment of a 
+# vsphere template clone and updating the ip
+# address in the /etc/ansible/hosts file.
+#
+# This playbook is used for Windows, Debian, 
+# and CentOS clones.
+#
+# Requires: 
+# - vault-password-file
+#
+- name: create VM
+  hosts: 127.0.0.1
+  gather_facts: false
+  connection: local
+  vars_files:
+    - "{{ vsphere_vars_file }}"
+    - '../group_vars/general.yml'
+  vars:
+    - powerOnTimeout: 120 
+    - ansible_os_family: Windows
+    - vmtemplate: tplW12r2S14
+  roles: 
+   - cloneVm
+...

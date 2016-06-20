@@ -1,0 +1,19 @@
+  - name: choco install
+    script: ../files/chocoInstall.ps1
+
+  - name: install psget
+    script: ../files/chocoInstallPsget.ps1
+
+  - name: install notepad plus plus
+    script: ../files/chocoInstallNppp.ps1
+
+  - name: disable firewall allow all
+    script: ../files/disable-firewall.bat
+
+  - name: disable firewall all profiles
+    script: ../files/disableFirewall.ps1
+
+  - name: rdp
+    script: ../files/RdpEnable.ps1
+
+

@@ -1,0 +1,5 @@
+vcenter_hostname: vsphere01.contoso.local
+vsphere_login: contoso\svc_ansible
+vsphere_password: p4ssw0rd
+#vmtemplate: tplW12r2S14
+#vmtemplate_ubuntu: LinuxUbuntu-Server-14.04-x64

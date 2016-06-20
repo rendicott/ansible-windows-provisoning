@@ -1,0 +1,8 @@
+ansible_ssh_user: Administrator
+ansible_ssh_pass: p4ssw0rd
+ansible_ssh_port: 5986
+ansible_python_interpreter: c:\\tools\\python2\\python.exe
+ansible_connection: winrm
+ansible_winrm_scheme: https
+windows_sa_user: sa
+windows_sa_pass: p4assw0rd

@@ -1,0 +1,10 @@
+  - name: join domain
+    script: ../files/domainJoin.ps1 "{{ vsphere_login }}" "{{ vsphere_password }}" "{{ project_name }}"
+    no_log: True
+
+  - name: deploy GetSetExplorerSettings.ps1 script...
+    win_copy: src=../files/GetSetExplorerSettings.ps1 dest=c:/GetSetExplorerSettings.ps1
+
+  - name: reboot machine again
+    raw: shutdown /r /t 0
+

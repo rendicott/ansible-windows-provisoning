@@ -1,0 +1,39 @@
+---
+# tasks file for deleteVm
+
+- name: Check for proper machine name
+  fail: msg="machineName is not defined"
+  when: machineName is not defined
+
+- name: Check for vSphere access parameters
+  fail: msg="Must set vsphere_login and vsphere_password in a Vault"
+  when: (vsphere_login is not defined) or (vsphere_password is not defined)
+
+- name: Check autodelete is defined
+  fail: msg="cdl_autodelete must be defined in order to delete the vm via ansible"
+  when: cdl_autodelete is not defined
+
+- name: Check for autodelete flag
+  fail: msg="Unable to delete vm, must set cdl_autodelete flag to true"
+  when: cdl_autodelete  == 0
+
+- name: Check for ips variable
+  fail: msg="Unable to parse IP addresses to delete"
+  when: ips is not defined
+
+
+- name: delete vm from vsphere
+  vsphere_guest:
+    vcenter_hostname: "{{ vcenter_hostname }}"
+    username: "{{ vsphere_login }}"
+    password: "{{ vsphere_password }}"
+    guest: "{{ machineName }}"
+    state: absent
+    force: yes
+
+- name: delete address from phpIpam
+  command: "{{ ansible_hosts_file }} --releaseip {{ item }}"
+  with_items:
+    - "{{ ips }}"
+
+...

@@ -1,0 +1,6 @@
+- include: first.yml
+  when: step == 'first'
+- include: second.yml
+  when: step == 'second'
+- include: third.yml
+  when: step == 'third'

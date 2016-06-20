@@ -1,0 +1,25 @@
+---
+# tasks file for unComputer
+
+- name: Check for proper machine name
+  fail: msg="machineName is not defined"
+  when: machineName is not defined
+
+- name: Check cdl_autodelete is defined
+  fail: msg="cdl_autodelete must be set to true to delete a vm via ansible"
+  when: cdl_autodelete is not defined
+
+- name: debug cdl_autodelete var
+  debug: msg="var cdl_autodelete = '{{ cdl_autodelete }}'"
+
+- name: check for cdl_autodelete
+  fail: msg="Unable to delete this VM, deletion requires the cdl_autodelete flag"
+  when: cdl_autodelete != "1"
+
+- name: Delete machine from Octopus
+  script: ../files/removeOctoMachine.ps1 "{{ machineName  }}"
+
+- name: delete computer account from domain
+  script: ../files/domainUnJoin.ps1 "{{ vsphere_login }}" "{{ vsphere_password }}"
+
+

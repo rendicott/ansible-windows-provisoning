@@ -1,0 +1,13 @@
+  - name: Check for proper machine name
+    fail: msg="machineName is not defined"
+    when: machineName is not defined
+
+  - name: rename machine using powershell
+    script: ../files/machineServername.ps1 "{{ machineName }}"
+
+  - name: debug var ansible_ssh_host
+    debug: msg="var 'ansible_ssh_host' = '{{ ansible_ssh_host }}'"
+
+  - name: reboot machine only
+    raw: shutdown /r /t 0
+

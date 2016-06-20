@@ -1,0 +1,65 @@
+- name: rename windows box
+  gather_facts: false
+  hosts: "{{ machineName }}"
+  connection: smart
+  vars_files:  
+    - '../group_vars/windows.yml'
+    - '../group_vars/general.yml' 
+    - '../group_vars/vsphere.yml'
+  roles:
+    - { role: windows, step: first }
+
+- name: local ansible wait for box to come back
+  hosts: localhost
+  connection: local
+  vars:
+    - tgtHost: "{{ groups[machineName] }}"
+  tasks:
+    - name: wait for machine to come back
+      wait_for:
+        host: "{{ item }}"
+        port: 5986
+        delay: 30
+        timeout: 85
+        state: started
+      with_items:
+        - "{{ tgtHost }}"
+
+- name: windows join domain
+  gather_facts: false
+  hosts: "{{ machineName }}"
+  connection: smart
+  vars_files:  
+    - '../group_vars/windows.yml'
+    - '../group_vars/general.yml' 
+    - '../group_vars/vsphere.yml'
+  roles:
+    - { role: windows, step: second }
+
+- name: local ansible wait for box to come back
+  hosts: localhost
+  connection: local
+  vars:
+    - tgtHost: "{{ groups[machineName] }}"
+  tasks:
+    - name: wait for machine to come back
+      wait_for:
+        host: "{{ item }}"
+        port: 5986
+        delay: 30
+        timeout: 75
+        state: started
+      with_items:
+        - "{{ tgtHost }}"
+
+- name: windows setup software etc
+  gather_facts: false
+  hosts: "{{ machineName }}"
+  connection: smart
+  vars_files:
+    - '../group_vars/windows.yml'
+    - '../group_vars/general.yml'
+    - '../group_vars/vsphere.yml'
+  roles:
+    - { role: windows, step: third }
+

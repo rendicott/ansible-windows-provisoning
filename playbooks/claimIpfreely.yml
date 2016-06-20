@@ -1,0 +1,33 @@
+---
+
+- name: Claim IP from static pool
+  hosts: 127.0.0.1
+  gather_facts: false
+  connection: local
+  vars_files:
+    - '../group_vars/general.yml'
+  vars:
+    - subnet: 10.119.6.0
+    - ips: "{{ groups[machineName] }}"
+  tasks:
+    - name: debug subnet
+      debug: msg="subnet = {{ subnet }}"
+
+    - name: grab first free IP in pool and claim for this hostname
+      command: "{{ansible_hosts_file}} --firstavailable {{ machineName }} --filtersubnet {{ subnet }} --capsv 'cdl_isprod:0|cdl_autodelete:1|cdl_dhcp:0|cdl_ansible_ignore:1'"
+      register: claimip
+
+    - name: debug detected IP from claim call
+      debug: msg="Detected new IP value is '{{ claimip.stdout_lines[1].split('|')[1] }}'"
+
+    - name: debug make sure we have var for current ip of machineName
+      debug: msg="Current IP is '{{ item }}'"
+      with_items:
+        - "{{ ips }}"
+
+    - name: update existing DHCP entry to include cdl_ansible_newaddr attribute
+      command: "{{ansible_hosts_file}} --modifyip {{ item }}:{{ machineName }} --filtersubnet {{ subnet }} --capsv 'cdl_isprod:0|cdl_autodelete:1|cdl_dhcp:0|cdl_ansible_ignore:0|cdl_ansible_newaddr:{{ claimip.stdout_lines[1].split('|')[1] }}'"
+      with_items:
+        - "{{ ips }}"
+
+...

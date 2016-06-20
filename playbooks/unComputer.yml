@@ -1,0 +1,31 @@
+---
+- name: Remove computer from domain and Octopus
+  hosts: "{{ machineName  }}"
+  gather_facts: false
+  connection: smart
+  vars_files:
+    - '{{ vsphere_vars_file  }}'
+    - '../group_vars/creds.yml'
+    - '../group_vars/general.yml'
+    - '../group_vars/windows.yml'
+  roles:
+    - unComputer
+
+- name: Deletes Octopus variables for given machine in all projects
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  vars:
+    - inv_autodelete: "{% for host in groups[machineName] %} {{ hostvars[host].cdl_autodelete }}  {% endfor %}"
+  tasks:
+    - name: debug var for cdl_autodelete
+      debug: msg="var inv_autodelete = '{{ inv_autodelete }}'"
+
+    - name: delete all machine vars in all projects
+      command: >
+        /usr/pyOcto/pyOcto.py -d -1
+        --machinename "{{ machineName }}"
+        --apikey "API-DZ8THETSLBBBBBBBBBBBBTT8HCQ"
+        --baseurl "http://octopusserver:8090"
+        --deletemachinevars
+      when: inv_autodelete == ' 1  '

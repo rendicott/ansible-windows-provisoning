@@ -1,0 +1,27 @@
+---
+# tasks file for windowsStaticIp
+
+- name: debug host vars
+  debug: msg="var 'oldIp' = '{{ oldIp }}'"
+
+- name: debug host vars
+  debug: msg="var 'newIp' = '{{ newIp }}'"
+
+- name: make sure temp dir exists on C
+  win_file: path='c:/temp' state=directory
+
+- name: Copy templated interface bounce script to remote
+  win_template: src=../templates/windows-set-static-ip.ps1 dest='c:/temp/windows-set-static-ip.ps1'
+
+- name: Template script to set scheduled task to run the bounce script in 10 seconds
+  win_template: src=../templates/add-scheduled-task.ps1 dest='c:/temp/add-scheduled-task.ps1'
+
+- name: Run add sched task script
+  raw: 'powershell.exe c:/temp/add-scheduled-task.ps1'
+
+- name: pause for 50 seconds to wait for bounce
+  pause: seconds=50
+
+
+...
+
