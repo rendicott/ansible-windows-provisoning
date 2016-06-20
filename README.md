@@ -14,13 +14,13 @@ Example scripts, playbooks, and roles for 'one-click' Windows VM creation from V
 Go through the following files and modify for your environment:
 
 * ./group_vars/general.yml 
-** (path to Ansible inventory script. This example uses pySser and phpIpam for inventory https://github.com/rendicott/pySser )
+ * (path to Ansible inventory script. This example uses pySser and phpIpam for inventory https://github.com/rendicott/pySser )
 * ./group_vars/vsphere.yml 
-** (credentials to talk to vsphere and clone vms)
+ * (credentials to talk to vsphere and clone vms)
 * ./group_vars/windows.yml 
-** (local admin credentials for the windows template)
+ * (local admin credentials for the windows template)
 * ./rundeck-jobscripts/createvm-windows.sh 
-** (change switch cases for vsphere hosts and IPs to match environment)
+ * (change switch cases for vsphere hosts and IPs to match environment)
 * you might have to go through some of the playbooks/roles to track down some variables (sorry)
 
 Then you can 
