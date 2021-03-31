@@ -14,7 +14,7 @@ Example scripts, playbooks, and roles for 'one-click' Windows VM creation from V
 Go through the following files and modify for your environment:
 
 * ./group_vars/general.yml 
- * (path to Ansible inventory script. This example uses pySser and phpIpam for inventory https://github.com/rendicott/pySser )
+ * (path to Ansible inventory script. This example uses php-ipam-cli and phpIpam for inventory https://github.com/rendicott/php-ipam-cli )
 * ./group_vars/vsphere.yml 
  * (credentials to talk to vsphere and clone vms)
 * ./group_vars/windows.yml 
